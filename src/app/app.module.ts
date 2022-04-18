@@ -23,7 +23,7 @@ import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { ProfileViewComponent } from './profile-view/profile-view.component';
 import { RouterModule, Routes } from '@angular/router';
 import { UserEditComponent } from './user-edit/user-edit.component';
-import { NavbarComponent } from './navbar/navbar-view.component';
+import { NavbarComponent } from './navbar/navbar.component';
 import { GenreViewComponent } from './genre-view/genre-view.component';
 import { DirectorViewComponent } from './director-view/director-view.component';
 import { MovieDescriptionComponent } from './movie-description/movie-description.component';
