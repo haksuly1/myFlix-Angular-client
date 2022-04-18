@@ -1,6 +1,6 @@
 /**
  * The UserProfileComponent is used to view the user profile.
- * @module UserProfileComponent
+ * @module ProfileViewComponent
  */
 
 import { Component, OnInit } from '@angular/core';
