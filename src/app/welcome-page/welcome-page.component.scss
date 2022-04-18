@@ -1,0 +1,51 @@
+.main-page {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-repeat: no-repeat;
+  background-size: auto;
+}
+
+mat-card {
+  margin-left: 700px;
+  margin-top: 60px;
+  margin-bottom: 270px;
+  color: white;
+  padding: 80px;
+  background-color: black;
+  outline: 5px solid white;
+  outline-offset: -10px;
+}
+
+mat-card-header {
+  justify-content: center;
+  color: rgb(161, 7, 7);
+}
+
+.content-container {
+  text-align: center;
+}
+
+mat-card-content {
+  font-size: 25px;
+  margin-top: 40px;
+  justify-content: center;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 60px;
+}
+
+.mat-stroked-button {
+  border: 3px solid rgb(202, 167, 8);
+  color: rgb(202, 167, 8);
+  width: 15vw;
+  transition-duration: 0.2s;
+}
+
+.mat-stroked-button:hover {
+  background-color: rgb(202, 167, 8);
+  color: black;
+}
