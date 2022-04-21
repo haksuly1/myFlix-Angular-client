@@ -1,14 +1,29 @@
-#wrap_inner {
-  width: 3000px;
+.movie-card {
+  background-color: #2e2d29;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-bottom: 15px;
+  padding: 2rem 4rem;
 }
 
-.movie-card {
-  background-color: #a52a2a;
-  padding-bottom: 15px;
+mat-card-actions.mat-card-actions {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.img-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .mat-button {
   padding: 0;
+}
+
+span.mat-button-wrapper {
+  color: black;
 }
 
 .mat-icon-button {
@@ -19,9 +34,8 @@
 }
 
 .mat-card {
-  margin-top: 25px;
-  margin-left: 10px;
-  margin-bottom: 20px;
+  margin: 2rem 1rem;
+  max-width: 280px;
 }
 
 .favourite-icon {
