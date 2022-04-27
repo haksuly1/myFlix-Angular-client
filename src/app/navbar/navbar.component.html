@@ -1,11 +1,12 @@
-<div class="navbar" id="wrap_inner">
-  <mat-toolbar class="tool-bar">
-    <span class="spacer"></span>
-    <button mat-button (click)="toProfile()">Profile</button>
-    <button mat-button (click)="toMovies()">Movies</button>
-
-    <button class="logout" mat-button color="primary" (click)="logOut()">
-      Logout
-    </button>
-  </mat-toolbar>
+<div class="nav-bar">
+  <a (click)="toMovies()">
+    <img src="assets/logo.png" alt="App Logo" class="logo" />
+  </a>
+  <button mat-button (click)="toMovies()">Movies</button>
+  <button mat-button [matMenuTriggerFor]="profile">
+    Profile<span class="material-icons">expand_more</span></button>
+  <mat-menu #profile="matMenu">
+    <button mat-menu-item (click)="toProfile()">My Account</button>
+    <button mat-menu-item (click)="logOut()">Logout</button>
+  </mat-menu>
 </div>

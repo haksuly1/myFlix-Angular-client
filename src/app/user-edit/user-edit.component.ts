@@ -41,7 +41,7 @@ export class UserEditComponent implements OnInit {
    */
   getUser(): void {
     const user = localStorage.getItem('user');
-    this.fetchApiData.getUserProfile(user).subscribe((resp: any) => {
+    this.fetchApiData.editUserProfile(user).subscribe((resp: any) => {
       this.user = resp;
     });
   }
