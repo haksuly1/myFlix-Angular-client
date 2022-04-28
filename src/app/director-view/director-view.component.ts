@@ -1,32 +1,33 @@
-/**
- * The DirectorViewComponent is used to render information about the directors.
+/** 
+ * The DirectorViewComponent is used to render a mat dialog containing information about the director of the movie selected.
  * @module DirectorViewComponent
  */
 
 import { Component, OnInit, Inject } from '@angular/core';
-import { FetchApiDataService } from '../fetch-api-data.service';
-// You'll use this import to close the dialog on success
-import { MAT_DIALOG_DATA } from '@angular/material/dialog'
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-director-view',
   templateUrl: './director-view.component.html',
-  styleUrls: ['./director-view.component.scss'],
+  styleUrls: ['./director-view.component.scss']
 })
-/**
- *
- * @param data
- */
 export class DirectorViewComponent implements OnInit {
+
+  /**
+   * The data that was passed to the Director dialog in the MovieCardComponent is injected in to the 
+   * constructor using the MAT_DIALOG_DATA injection token. The data becomes a property on the class
+   * and is hence available to be output in the template.
+   */
   constructor(
-    public fetchApiData: FetchApiDataService,
     @Inject(MAT_DIALOG_DATA)
     public data: {
-      name: string;
-      bio: string;
-      birthdate: Date;
+      Name: string;
+      Bio: string;
     }
   ) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
+
 }

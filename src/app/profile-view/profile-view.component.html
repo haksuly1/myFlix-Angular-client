@@ -2,18 +2,18 @@
 <div class="profile-body">
   <mat-card class="profilebackground">
     <div class="user-info">
-      <h2>Hello {{ user.Username }}!</h2>
+      <h2>Hello {{ user.username }}!</h2>
       <h2 style="font-style: italic; text-decoration: underline">
         Your Profile Information
       </h2>
 
       <mat-card-header> </mat-card-header>
       <mat-card-content>
-        <h3><b>Username: </b>{{ this.user.Username }}</h3>
-        <h3><b>Email: </b>{{ user.Email }}</h3>
-        <h3><b>Birthday: </b>{{ user.Birthday }}</h3>
+        <h3><b>Username: </b>{{ this.user.username }}</h3>
+        <h3><b>Email: </b>{{ user.email }}</h3>
+        <h3><b>Birthday: </b>{{ user.birthday }}</h3>
         <br />
-        <!-- <h3><b>Favourite Movies:</b> {{ user.FavouriteMovies }}</h3> -->
+
         <button class="profile-btn" mat-raised-button (click)="openEditUserProfile()" style="margin-right: 10px"
           color="primary">
           Edit Profile
@@ -27,7 +27,7 @@
   <div class="moviebox">
     <div *ngIf="displayElement; else message">
       <h2>Favourite movies</h2>
-      <mat-card *ngFor="let movie of favMovies; let i = index">
+      <mat-card *ngFor="let movie of FavMovie">
         <mat-dialog-content>
           <mat-card-title>{{ movie.title }}</mat-card-title>
           <mat-card-subtitle><img class="movie-image" src="{{ movie.ImagePath }}" /></mat-card-subtitle>
@@ -52,7 +52,7 @@
               ">
               Synopsis
             </button>
-            <button class="delete-button" mat-button color="grey" (click)="removeFav(movie._id)">
+            <button class="delete-button" mat-button color="grey" (click)="removeFavMovie(movie._id, movie.Title)">
               Delete Favorite Movie
             </button>
           </mat-card-header>

@@ -10,7 +10,8 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { FetchApiDataService } from '../fetch-api-data.service';
+import { FetchApiDataService } from '../fetch-api-data.service'
+import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GenreViewComponent } from '../genre-view/genre-view.component';
@@ -23,14 +24,17 @@ import { SynopsisViewComponent } from '../synopsis-view/synopsis-view.component'
   styleUrls: ['./movie-card.component.scss']
 })
 export class MovieCardComponent implements OnInit {
+  user: any = {};
+  username: any = localStorage.getItem('user');
   movies: any[] = [];
   genres: any[] = [];
-  favouriteMovies: any[] = [];
+  FavMovie: any[] = [];
 
   constructor(
     public fetchApiData: FetchApiDataService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
+    public router: Router
   ) { }
 
   /**
@@ -38,21 +42,34 @@ export class MovieCardComponent implements OnInit {
    */
   ngOnInit(): void {
     this.getMovies();
-    this.getGenres();
-    this.getFavouriteMovies();
-  }
+    this.showFavMovie();
 
+  }
 
   /**
    * Invokes the getAllMovies method on the fetchApiData service and populates the movies array with the response. 
    * @function getAllMovies
    * @return an array with all movie objects in json format
    */
+
   getMovies(): void {
-    this.fetchApiData.getAllMovies().subscribe((resp: any) => {
+    this.fetchApiData.getMovies().subscribe((resp: any) => {
       this.movies = resp;
       console.log(this.movies);
       return this.movies;
+    });
+  }
+
+  getCurrentUser(): void {
+    const username = localStorage.getItem('user');
+    this.fetchApiData.getUser(username).subscribe((resp: any) => {
+
+      console.log(resp)
+      const currentUser = resp.username
+      console.log(currentUser)
+      const currentFavs = resp.FavoriteMovies
+      console.log(currentFavs)
+
     });
   }
 
@@ -70,33 +87,69 @@ export class MovieCardComponent implements OnInit {
   }
 
   /**
-   * Invokes the getUserProfile method on the fetchApiData service and populates the favouriteMovies array with
-   * the FavouriteMovies property on the response, which is an array of the user's favourite movies.
-   * @function getFavouriteMovies
-   * @returns an array with movie objects from user's FavouriteMovies list 
-   */
-  getFavouriteMovies(): void {
-    this.fetchApiData.getUserProfile().subscribe((resp: any) => {
-      this.favouriteMovies = resp.FavouriteMovies;
-      console.log(this.favouriteMovies);
+     * Invokes the getUserProfile method on the fetchApiData service and populates the favouriteMovies array with
+     * the FavouriteMovies property on the response, which is an array of the user's favourite movies.
+     * @function getFavouriteMovies
+     * @returns an array with movie objects from user's FavouriteMovies list 
+     */
+  showFavMovie(): void {
+    const user = localStorage.getItem('user');
+    this.fetchApiData.getUser(user).subscribe((resp: any) => {
+      this.FavMovie = resp.FavoriteMovies;
+      return this.FavMovie;
     });
   }
 
   /**
-   * Open a dialog to display the director component, passing it the data it needs to display inside the data object.
-   * @param name name of the director of the selected movie.
-   * @param bio bio of the director.
-   * @param birthdate birthdate of the director.
+   * Invokes the addFavouriteMovie method on the fetchApiData service, to add the movie to the user's
+   * FavouriteMovies. If successful, a popup is displayed confirming that the movie has been added. 
+   * @function addFavouriteMovie
+   * @param MovieID _id of the selected movie.
+   * @param title Title of the selected movie.
+   * @returns an updated array of movie objects in a user's FavouriteMovies list
    */
-  openDirector(name: string, bio: string, birthdate: Date): void {
-    this.dialog.open(DirectorViewComponent, {
-      data: {
-        Name: name,
-        Bio: bio,
-        Birthdate: birthdate,
-      },
-      width: '500px',
-      backdropClass: 'backdropBackground'
+  addFavouriteMovie(movieId: string, Title: string): void {
+    this.fetchApiData.addFavouriteMovie(movieId).subscribe((resp: any) => {
+      console.log(resp);
+      this.snackBar.open(`${Title} has been added to your favourites!`, 'OK', {
+        duration: 3000,
+      });
+      this.showFavMovie();
+    });
+  }
+
+  setAsFavourite(movie: any): void {
+    this.isFavourite(movie._id)
+      ? this.deleteFavouriteMovie(movie._id, movie.Title)
+      : this.addFavouriteMovie(movie._id, movie.Title);
+  }
+
+  /**
+   * Function that checks if the user's FavouriteMovies list includes the selected movie's _id
+   * @param MovieID _id of the selected movie.
+   * @returns true or false
+   */
+  isFavourite(movieId: string): boolean {
+    console.log(movieId);
+    console.log('FavouriteMovie list', this.FavMovie);
+    return this.FavMovie.some((id) => id === movieId);
+  }
+
+  /**
+     * Invokes the deleteFavouriteMovie method on the fetchApiData service, to remove the movie from the user's
+     * FavouriteMovies. If successful, a popup is displayed confirming that the movie has been removed. 
+     * @function deleteFavoriteMovies
+     * @param MovieID _id of the selected movie.
+     * @param title Title of the selected movie.
+     * @returns an updated array of movie objects in a user's FavouriteMovies list
+     */
+  deleteFavouriteMovie(movieId: string, Title: string): void {
+    this.fetchApiData.deleteFavouriteMovie(movieId).subscribe((resp: any) => {
+      console.log(resp);
+      this.snackBar.open(`${Title} is no longer a favourite of yours!`, 'OK', {
+        duration: 3000,
+      });
+      this.showFavMovie();
     });
   }
 
@@ -114,105 +167,53 @@ export class MovieCardComponent implements OnInit {
         ImagePath: imagePath,
         Description: description,
       },
-      width: '500px',
-      backdropClass: 'backdropBackground'
+      width: '500px'
     });
+
   }
 
   /**
-   * Function to search through genres array and find a match to the MovieID.
-   * Opens a dialog to display the genre component, passing it the data it needs to display inside the data object.
-   * @function openGenre
-   * @param id id of the selected movie
-   */
-  openGenre(id: string): void {
-    let name;
-    let description;
-    console.log(id);
-
-    for (let i = 0; i < this.genres.length; i++) {
-      console.log(this.genres[i]._id)
-      if (this.genres[i]._id == id) {
-        name = this.genres[i].Name;
-        description = this.genres[i].Description;
-        break;
-      }
-    }
+     * Function to search through genres array and find a match to the MovieID.
+     * Opens a dialog to display the genre component, passing it the data it needs to display inside the data object.
+     * @function openGenre
+     * @param id id of the selected movie
+     */
+  openGenreDialog(name: string, description: string): void {
     this.dialog.open(GenreViewComponent, {
+      panelClass: 'custom-dialog-container',
       data: {
         Name: name,
         Description: description,
       },
+      width: '500px'
+    });
+  }
+
+  /**
+   * Open a dialog to display the director component, passing it the data it needs to display inside the data object.
+   * @param name name of the director of the selected movie.
+   * @param bio bio of the director.
+   * @param birthdate birthdate of the director.
+   */
+
+  openDirectorDialog(name: string, bio: string): void {
+    this.dialog.open(DirectorViewComponent, {
+      panelClass: 'custom-dialog-container',
+      data: { Name: name, Bio: bio },
       width: '500px',
-      backdropClass: 'backdropBackground'
     });
   }
-
-
-  /**
-   * Invokes the addFavouriteMovie method on the fetchApiData service, to add the movie to the user's
-   * FavouriteMovies. If successful, a popup is displayed confirming that the movie has been added. 
-   * @function addFavouriteMovie
-   * @param MovieID _id of the selected movie.
-   * @param title Title of the selected movie.
-   * @returns an updated array of movie objects in a user's FavouriteMovies list
-   */
-  addFavouriteMovie(MovieID: string, title: string): void {
-    this.fetchApiData.addFavouriteMovie(MovieID).subscribe((resp: any) => {
-      this.snackBar.open(`${title} has been added to your favourites!`, 'OK', {
-        duration: 3000,
-      });
-      this.ngOnInit();
-    });
-    return this.getFavouriteMovies();
-  }
-
-
-  /**
-   * Invokes the deleteFavouriteMovie method on the fetchApiData service, to remove the movie from the user's
-   * FavouriteMovies. If successful, a popup is displayed confirming that the movie has been removed. 
-   * @function deleteFavoriteMovies
-   * @param MovieID _id of the selected movie.
-   * @param title Title of the selected movie.
-   * @returns an updated array of movie objects in a user's FavouriteMovies list
-   */
-  removeFavouriteMovie(MovieID: string, title: string): void {
-    this.fetchApiData.deleteFavouriteMovie(MovieID).subscribe((resp: any) => {
-      console.log(resp);
-      this.snackBar.open(
-        `${title} has been removed from your favourites!`,
-        'OK',
-        {
-          duration: 3000,
-        }
-      );
-      this.ngOnInit();
-    });
-    return this.getFavouriteMovies();
-  }
-
-  /**
-   * Function that checks if the user's FavouriteMovies list includes the selected movie's _id
-   * @param MovieID _id of the selected movie.
-   * @returns true or false
-   */
-  isFavourited(MovieID: string): boolean {
-    return this.favouriteMovies.includes(MovieID);
-  }
-
-  /**
-   * Function to add/remove favourite movie to/from FavouriteMovies list.
-   * If the movie is not on the favourite list, call @function addFavouriteMovie.
-   * If the movie is already on the user favorite list, call @function removeFavouriteMovie.
-   * @param movie the selected movie object
-   * @returns addFavouriteMovie or removeFavouriteMovie functions.
-   */
-  toggleFavourite(movie: any): void {
-    console.log(movie);
-    this.isFavourited(movie._id)
-      ? this.removeFavouriteMovie(movie._id, movie.Title)
-      : this.addFavouriteMovie(movie._id, movie.Title);
-  }
-
-
 }
+
+  
+  
+
+  
+  
+
+  
+
+  
+  
+  
+  

@@ -27,16 +27,16 @@ const apiUrl = 'https://haksuly1movieapp.herokuapp.com/';
 
 
 export class FetchApiDataService {
-  getGenre: any;
   getUser: any;
   deleteFavMovie: any;
+  getGenre: any;
+  getMovies: any;
   /**
    * * Inject the HttpClient module to the constructor params.
    * This will provide HttpClient to the entire class, making it available via "this.http"
    * @param http
    */
   constructor(private http: HttpClient) { }
-
 
   /** 
    * Function to register users by making an API call to the users registration endpoint (POST /users).
@@ -50,7 +50,6 @@ export class FetchApiDataService {
       .post(apiUrl + 'users', userDetails)
       .pipe(catchError(this.handleError));
   }
-
 
   /**
    * Function to login users by making an API call to the users login endpoint (POST /login).
@@ -258,7 +257,7 @@ export class FetchApiDataService {
         `Error Status code ${error.status}, ` +
         `Error body is: ${error.error}`);
     }
-    return (
+    return throwError(
       'Something bad happened; please try again later.');
   }
 }

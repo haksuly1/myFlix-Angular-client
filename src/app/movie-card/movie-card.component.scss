@@ -1,15 +1,14 @@
 .movie-card {
-  background-color: #2e2d29;
+  background-color: #511026;
+  background-image: url("https://images.unsplash.com/photo-1608889175250-c3b0c1667d3a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1160&q=80");
+  background-size: cover;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  padding-bottom: 15px;
-  padding: 2rem 4rem;
-}
-
-mat-card-actions.mat-card-actions {
-  display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
+  justify-items: stretch;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .img-container {
@@ -18,26 +17,37 @@ mat-card-actions.mat-card-actions {
   justify-content: center;
 }
 
-.mat-button {
-  padding: 0;
+img {
+  object-fit: cover;
+  width: 150px;
+  height: 150px;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 1rem;
+  border-radius: 5%;
 }
 
-span.mat-button-wrapper {
-  color: black;
+.mat-dialog-content {
+  width: 300px;
+  display: grid;
 }
 
-.mat-icon-button {
-  color: red;
-  position: absolute;
-  right: 5px;
-  top: 5px;
+.mat-card-title {
+  text-align: center;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
 }
 
 .mat-card {
-  margin: 2rem 1rem;
-  max-width: 280px;
+  margin: 2rem;
+  display: grid;
+  background-color: #7c92a1;
+  overflow: hidden;
 }
 
-.favourite-icon {
-  align-items: right;
+.mat-card-header {
+  display: grid;
+  grid-template-columns: 2fr;
+  background-color: #e6e6e6;
 }
