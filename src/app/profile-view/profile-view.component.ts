@@ -82,8 +82,6 @@ export class ProfileViewComponent implements OnInit {
     });
   }
 
-
-
   getFavMovie(): void {
     this.fetchApiData.getMovies().subscribe((resp: any) => {
       this.movies = resp;

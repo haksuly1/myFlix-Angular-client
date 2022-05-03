@@ -25,7 +25,7 @@ export class UserLoginFormComponent implements OnInit {
    * userCredentials values are populated by form inputs in the user-login-form template that are bound 
    * using the ngModel directive.
    */
-  @Input() userCredentials = {
+  @Input() userData = {
     Username: '',
     Password: ''
   };
@@ -41,20 +41,18 @@ export class UserLoginFormComponent implements OnInit {
   }
 
   /**
-   * Invokes the userLogin method on the fetchApiData service, with the userCredentials from the form
-   * in order to log in the user. A successful login closes the form and navigates the user to the
-   * movies route. A popup is displayed confirming login success. If unsuccessful, a popup message
-   * asks the user to check their username and password.
+   * function responsible for sending form inputs to backend
+   * @function userLogin
+   * @return user data in JSON format
    */
   loginUser(): void {
-    this.fetchApiData.userLogin(this.userCredentials).subscribe((response) => {
+    this.fetchApiData.userLogin(this.userData).subscribe((response) => {
       console.log(response);
       // Logic for a successful user login
-      localStorage.setItem('user', JSON.stringify(response.user));
-      //localStorage.setItem('user', response.user.Username);
+      //localStorage.setItem('user', JSON.stringify(response.user));
+      localStorage.setItem('user', response.user.Username);
       localStorage.setItem('token', response.token);
-      localStorage.setItem('UserID', response.user._id);
-      
+      //localStorage.setItem('UserID', response.user.Username);
       console.log(response.user);
       this.dialogRef.close(); // This will close the modal on success!
       this.snackBar.open('User login successful!', 'OK', {
@@ -62,9 +60,14 @@ export class UserLoginFormComponent implements OnInit {
       });
       this.router.navigate(['movies']);
     }, (response) => {
+      console.log(response);
       this.snackBar.open("Login unsuccessful. Please check your username and password", 'OK', {
         duration: 2000
       });
     });
+  }
+
+  closeDialog(): void {
+    this.dialogRef.close();
   }
 }
