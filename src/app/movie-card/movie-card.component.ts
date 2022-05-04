@@ -43,7 +43,6 @@ export class MovieCardComponent implements OnInit {
   ngOnInit(): void {
     this.getMovies();
     this.showFavMovie();
-
   }
 
   /**
@@ -102,10 +101,10 @@ export class MovieCardComponent implements OnInit {
 
   /**
    * Invokes the addFavouriteMovie method on the fetchApiData service, to add the movie to the user's
-   * FavouriteMovies. If successful, a popup is displayed confirming that the movie has been added. 
+   * FavouriteMovies. If successful, a popup is displayed confirming that the movie has been added.
    * @function addFavouriteMovie
    * @param MovieID _id of the selected movie.
-   * @param title Title of the selected movie.
+   * @param movieId Title of the selected movie.
    * @returns an updated array of movie objects in a user's FavouriteMovies list
    */
   addFavouriteMovie(movieId: string, Title: string): void {
@@ -124,10 +123,13 @@ export class MovieCardComponent implements OnInit {
       : this.addFavouriteMovie(movie._id, movie.Title);
   }
 
+  
   /**
-   * Function that checks if the user's FavouriteMovies list includes the selected movie's _id
-   * @param MovieID _id of the selected movie.
-   * @returns true or false
+   * function to toggle favorited status
+   * @function addFavMovie or
+   * @function deleteFavMovie
+  depending on fav status
+   * @param movieId
    */
   isFavourite(movieId: string): boolean {
     console.log(movieId);
@@ -136,13 +138,13 @@ export class MovieCardComponent implements OnInit {
   }
 
   /**
-     * Invokes the deleteFavouriteMovie method on the fetchApiData service, to remove the movie from the user's
-     * FavouriteMovies. If successful, a popup is displayed confirming that the movie has been removed. 
-     * @function deleteFavoriteMovies
-     * @param MovieID _id of the selected movie.
-     * @param title Title of the selected movie.
-     * @returns an updated array of movie objects in a user's FavouriteMovies list
-     */
+   * Invokes the deleteFavouriteMovie method on the fetchApiData service, to remove the movie from the user's
+   * FavouriteMovies. If successful, a popup is displayed confirming that the movie has been removed.
+   * @function deleteFavoriteMovies
+   * @param Title _id of the selected movie.
+   * @param movieId Title of the selected movie.
+   * @returns an updated array of movie objects in a user's FavouriteMovies list
+   */
   deleteFavouriteMovie(movieId: string, Title: string): void {
     this.fetchApiData.deleteFavouriteMovie(movieId).subscribe((resp: any) => {
       console.log(resp);
@@ -189,13 +191,12 @@ export class MovieCardComponent implements OnInit {
     });
   }
 
+
   /**
    * Open a dialog to display the director component, passing it the data it needs to display inside the data object.
    * @param name name of the director of the selected movie.
    * @param bio bio of the director.
-   * @param birthdate birthdate of the director.
    */
-
   openDirectorDialog(name: string, bio: string): void {
     this.dialog.open(DirectorViewComponent, {
       panelClass: 'custom-dialog-container',

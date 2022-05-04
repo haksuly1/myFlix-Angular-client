@@ -18,6 +18,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./user-registration-form.component.scss']
 })
 export class UserRegistrationFormComponent implements OnInit {
+  /**
+   * input values stored in userData
+   */
 
   @Input() userData = { Username: '', Password: '', Email: '', Birthday: '' };
 
@@ -31,7 +34,13 @@ export class UserRegistrationFormComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  // This is the function responsible for sending the form inputs to the backend
+  /**
+   * function for sending the form inputs to the backend
+   * @function userRegistration
+   * @param userData {object}
+   * @return new user data in JSON format
+   */
+
   registerUser(): void {
     this.fetchApiData.userRegistration(this.userData).subscribe((response) => {
       let userCredentials = (({ Username, Password }) => ({ Username, Password }))(this.userData);
@@ -41,7 +50,10 @@ export class UserRegistrationFormComponent implements OnInit {
         localStorage.setItem('token', response.token);
         localStorage.setItem('UserID', response.user._id);
         localStorage.setItem('user', JSON.stringify(response.user));
-        this.dialogRef.close(); //Closes the modal on success
+        /**
+          * close Dialog on button press 
+          */
+        this.dialogRef.close();
         this.router.navigate(['movies']); //Routes user to "/movies"
       }, (response) => {
         this.snackBar.open(response, 'OK', {

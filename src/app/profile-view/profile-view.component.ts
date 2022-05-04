@@ -36,7 +36,12 @@ export class ProfileViewComponent implements OnInit {
     this.getUser();
     this.getFavMovie()
   }
-
+  
+  /**
+   * calls API endpoint to get user info
+   * @function getUser
+   * @return user data in JSON format
+   */
   getUser(): void {
     const user = localStorage.getItem('user');
     if (user) {
@@ -46,6 +51,12 @@ export class ProfileViewComponent implements OnInit {
       });
     }
   }
+
+  /**
+   * open Synopsis dialog
+   * @param title 
+   * @param description 
+   */
 
   openSynopsis(title: string, imagePath: any, description: string): void {
     this.dialog.open(SynopsisViewComponent, {
@@ -59,6 +70,10 @@ export class ProfileViewComponent implements OnInit {
 
   }
 
+  /**
+   * open Director dialog 
+   */
+
   openEditUserProfile(): void {
     this.dialog.open(UserEditComponent, {
       width: '500px'
@@ -71,7 +86,13 @@ export class ProfileViewComponent implements OnInit {
       width: '500px',
     });
   }
-  // Open Genre View
+ 
+  /**
+     * open Genre dialog
+     * @param name 
+     * @param description 
+     */
+
   openGenreDialog(name: string, description: string): void {
     this.dialog.open(GenreViewComponent, {
       data: {
@@ -81,6 +102,11 @@ export class ProfileViewComponent implements OnInit {
       width: '500px'
     });
   }
+
+  /**
+   * function to let the user display their favorited movies 
+   * @function getAllMovies
+   */
 
   getFavMovie(): void {
     this.fetchApiData.getMovies().subscribe((resp: any) => {
@@ -94,6 +120,14 @@ export class ProfileViewComponent implements OnInit {
     console.log(this.FavMovie);
   }
 
+
+  /**
+   * function to let the user remove a movie from their favorited movies
+   * @function deleteFavMovie
+   * @param movieId
+   * @param Title
+   * @returns updated user data in JSON format
+   */
   removeFavMovie(movieId: string, Title: string): void {
     this.fetchApiData.deleteFavouriteMovie(movieId).subscribe((resp) => {
       console.log(resp);
@@ -110,7 +144,9 @@ export class ProfileViewComponent implements OnInit {
     });
   }
 
-  //Delete User account
+  /**
+   * dialog to delete user profile information
+   */
 
   deleteUserProfile(): void {
     if (confirm('Are you sure? This cannot be undone.')) {
