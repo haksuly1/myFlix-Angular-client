@@ -8,11 +8,14 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./synopsis-view.component.scss']
 })
 export class SynopsisViewComponent implements OnInit {
-
+  
+  /**
+     * 
+     * @param data 
+     */
 
   constructor(
-
-
+    
     /**
      * Uses Inject to get the movie details from the movie object
      */
